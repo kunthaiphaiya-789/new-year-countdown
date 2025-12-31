@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>សួស្តីឆ្នាំថ្មីគ្រួសារធំ - 2026 Countdown</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Kantumruy+Pro:wght@400;700&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: #05050a;
+            color: #f8fafc;
+            font-family: 'Kantumruy Pro', sans-serif;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+
+        /* Fixed Background Layers */
+        #galaxy-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            background: radial-gradient(circle at center, #1a0a1a 0%, #05050a 100%);
+        }
+
+        /* Atmospheric Layer: Clouds & Smoke */
+        .atmosphere {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .cloud {
+            position: absolute;
+            background: radial-gradient(circle, rgba(255, 182, 193, 0.08) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: moveCloud linear infinite;
+        }
+
+        /* Love Hearts Effect */
+        .heart {
+            position: absolute;
+            color: rgba(255, 0, 128, 0.4);
+            font-size: 20px;
+            pointer-events: none;
+            z-index: 1;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes moveCloud {
+            from { transform: translateX(-200px); }
+            to { transform: translateX(calc(100vw + 200px)); }
+        }
+
+        .nebula-system {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .nebula {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.15;
+            animation: drift 40s infinite alternate ease-in-out;
+        }
+
+        .nebula-1 { width: 80vw; height: 80vw; background: radial-gradient(circle, #701a75, transparent); top: -20%; left: -20%; }
+        .nebula-2 { width: 90vw; height: 90vw; background: radial-gradient(circle, #4c1d95, transparent); bottom: -30%; right: -20%; animation-delay: -20s; }
+
+        @keyframes drift {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(100px, 50px) scale(1.1); }
+        }
+
+        /* Active Effects Layer */
+        #fireworks-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* 8K Moon Rendering */
+        #celestial-moon {
+            position: absolute;
+            top: 10%;
+            right: 10%;
+            width: clamp(100px, 15vw, 180px);
+            aspect-ratio: 1/1;
+            background: radial-gradient(circle at 30% 30%, #fff0f5 0%, #ffc0cb 40%, #db7093 100%);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 80px rgba(255, 192, 203, 0.3),
+                inset -20px -20px 50px rgba(0,0,0,0.6);
+            z-index: 3;
+            animation: moon-pulse 6s infinite alternate ease-in-out;
+        }
+
+        @keyframes moon-pulse {
+            from { transform: scale(1); opacity: 0.8; }
+            to { transform: scale(1.05); opacity: 1; }
+        }
+
+        /* Content UI */
+        .content-layer {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            pointer-events: none;
+        }
+
+        .big-year {
+            font-family: 'Bungee', cursive;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            background: linear-gradient(90deg, #ff0080, #ffd700, #ff00ff, #ff0080);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: textFlow 5s linear infinite;
+        }
+
+        .year-2025 { font-size: clamp(6rem, 20vw, 15rem); line-height: 0.8; transition: all 1s ease; }
+        .year-2026 { font-size: 3rem; opacity: 0.3; margin-top: 1rem; filter: blur(2px); transition: all 1s ease; }
+
+        .year-2026.released {
+            font-size: clamp(6rem, 20vw, 15rem);
+            opacity: 1;
+            filter: blur(0) drop-shadow(0 0 50px rgba(255, 0, 128, 0.6));
+            margin-top: -2rem;
+        }
+
+        .year-2025.faded { font-size: 3rem; opacity: 0.1; }
+
+        @keyframes textFlow {
+            to { background-position: 200% center; }
+        }
+
+        .title-banner {
+            font-family: 'Kantumruy Pro', sans-serif;
+            font-weight: 700;
+            font-size: clamp(1.8rem, 5vw, 3.5rem);
+            background: linear-gradient(to right, #ff0080, #ff85a2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-top: 2rem;
+            filter: drop-shadow(0 0 10px rgba(255, 0, 128, 0.3));
+        }
+
+        .percent-display {
+            font-family: 'Bungee', cursive;
+            font-size: clamp(1.2rem, 3.5vw, 2.2rem);
+            margin-bottom: 0.5rem;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 0, 128, 0.5);
+        }
+
+        .progress-track {
+            width: 600px;
+            max-width: 80%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(255, 182, 193, 0.2);
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff0080, #ffd700);
+            box-shadow: 0 0 20px #ff0080;
+        }
+
+        .clock-display {
+            font-family: 'Bungee', cursive;
+            font-size: clamp(3rem, 10vw, 7rem);
+            color: white;
+            line-height: 1;
+            letter-spacing: 2px;
+        }
+
+        #final-message {
+            position: absolute;
+            top: 25%;
+            width: 100%;
+            text-align: center;
+            font-family: 'Pacifico', cursive;
+            font-size: clamp(2.5rem, 7vw, 5rem);
+            color: #ff0080;
+            text-shadow: 0 0 30px rgba(255, 0, 128, 0.8), 0 0 60px rgba(255, 255, 255, 0.4);
+            z-index: 30;
+            opacity: 0;
+            transform: translateY(50px) scale(0.8);
+            transition: all 2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #final-message.show { opacity: 1; transform: translateY(0) scale(1); }
+    </style>
+</head>
+<body>
+
+    <canvas id="galaxy-canvas"></canvas>
+    <div class="atmosphere" id="atmosphere-layer"></div>
+    <div class="nebula-system">
+        <div class="nebula nebula-1"></div>
+        <div class="nebula nebula-2"></div>
+    </div>
+    <canvas id="fireworks-canvas"></canvas>
+    <div id="celestial-moon"></div>
+    <div id="final-message">Tai Love Vannary Forever ❤️</div>
+
+    <div class="content-layer">
+        <div id="y2025" class="big-year year-2025">2025</div>
+        <div id="y2026" class="big-year year-2026">2026</div>
+
+        <div class="mt-8 flex flex-col items-center w-full">
+            <div id="percent-text" class="percent-display">0.0000000%</div>
+            <div class="progress-track">
+                <div id="progress-bar"></div>
+            </div>
+        </div>
+
+        <div class="flex flex-col items-center">
+            <div class="text-white opacity-80 text-lg tracking-widest mb-2 font-bold uppercase">រាប់ថយក្រោយទៅកាន់ឆ្នាំ ២០២៦</div>
+            <div id="clock" class="clock-display">00:00:00</div>
+            <div class="title-banner">សួស្តីឆ្នាំថ្មីគ្រួសារធំ</div>
+        </div>
+    </div>
+
+    <script>
+        const gCanvas = document.getElementById('galaxy-canvas');
+        const fCanvas = document.getElementById('fireworks-canvas');
+        const gCtx = gCanvas.getContext('2d');
+        const fCtx = fCanvas.getContext('2d');
+        const atmosphere = document.getElementById('atmosphere-layer');
+        
+        let stars = [];
+        let particles = [];
+        let fireworks = [];
+
+        function initAtmosphere() {
+            for(let i=0; i<6; i++) {
+                const cloud = document.createElement('div');
+                cloud.className = 'cloud';
+                const size = Math.random() * 300 + 200;
+                cloud.style.width = size + 'px';
+                cloud.style.height = (size * 0.6) + 'px';
+                cloud.style.top = (Math.random() * 100) + 'vh';
+                cloud.style.animationDuration = (Math.random() * 40 + 60) + 's';
+                cloud.style.animationDelay = (Math.random() * -60) + 's';
+                atmosphere.appendChild(cloud);
+            }
+
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                heart.style.animationDuration = (Math.random() * 5 + 10) + 's';
+                atmosphere.appendChild(heart);
+                setTimeout(() => heart.remove(), 15000);
+            }, 800);
+        }
+
+        function resize() {
+            const dpr = window.devicePixelRatio || 1;
+            gCanvas.width = fCanvas.width = window.innerWidth * dpr;
+            gCanvas.height = fCanvas.height = window.innerHeight * dpr;
+            gCtx.scale(dpr, dpr);
+            fCtx.scale(dpr, dpr);
+            initStars();
+        }
+
+        function initStars() {
+            stars = [];
+            for(let i=0; i<400; i++) {
+                stars.push({
+                    x: Math.random() * window.innerWidth,
+                    y: Math.random() * window.innerHeight,
+                    r: Math.random() * 1.5,
+                    o: Math.random(),
+                    s: 0.005 + Math.random() * 0.01
+                });
+            }
+        }
+
+        class Firework {
+            constructor() {
+                this.x = Math.random() * window.innerWidth;
+                this.y = window.innerHeight;
+                this.ty = Math.random() * (window.innerHeight * 0.5);
+                this.color = Math.random() > 0.5 ? `hsl(330, 100%, 65%)` : `hsl(45, 100%, 65%)`;
+                this.v = 4 + Math.random() * 4;
+            }
+            update() {
+                this.y -= this.v;
+                if(this.y <= this.ty) {
+                    this.explode();
+                    return false;
+                }
+                return true;
+            }
+            draw() {
+                fCtx.fillStyle = this.color;
+                fCtx.beginPath();
+                fCtx.arc(this.x, this.y, 2, 0, Math.PI*2);
+                fCtx.fill();
+            }
+            explode() {
+                for(let i=0; i<100; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = Math.random() * 5 + 1;
+                    particles.push({
+                        x: this.x,
+                        y: this.y,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed,
+                        alpha: 1,
+                        color: this.color
+                    });
+                }
+            }
+        }
+
+        function render() {
+            gCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            stars.forEach(s => {
+                s.o += s.s;
+                if(s.o > 1 || s.o < 0) s.s *= -1;
+                gCtx.globalAlpha = s.o;
+                gCtx.fillStyle = '#fff';
+                gCtx.beginPath();
+                gCtx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+                gCtx.fill();
+            });
+
+            fCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+            if(Math.random() < 0.035) fireworks.push(new Firework());
+            
+            fireworks = fireworks.filter(f => {
+                f.draw();
+                return f.update();
+            });
+
+            particles = particles.filter(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.1;
+                p.alpha -= 0.012;
+                if(p.alpha <= 0) return false;
+                fCtx.globalAlpha = p.alpha;
+                fCtx.fillStyle = p.color;
+                fCtx.beginPath();
+                fCtx.arc(p.x, p.y, 1.8, 0, Math.PI*2);
+                fCtx.fill();
+                return true;
+            });
+
+            requestAnimationFrame(render);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        initAtmosphere();
+        render();
+
+        const target = new Date(2026, 0, 1, 0, 0, 0).getTime();
+        const start = new Date(2025, 0, 1, 0, 0, 0).getTime();
+
+        function updateCountdown() {
+            const now = Date.now();
+            const clock = new Date().toTimeString().split(' ')[0];
+            document.getElementById('clock').innerText = clock;
+
+            let pct = ((now - start) / (target - start)) * 100;
+            if(pct >= 100) {
+                pct = 100;
+                document.getElementById('y2025').classList.add('faded');
+                document.getElementById('y2026').classList.add('released');
+                document.getElementById('final-message').classList.add('show');
+            }
+
+            document.getElementById('percent-text').innerText = pct.toFixed(7) + '%';
+            document.getElementById('progress-bar').style.width = pct + '%';
+
+            requestAnimationFrame(updateCountdown);
+        }
+        updateCountdown();
+    </script>
+</body>
+</html>
+
